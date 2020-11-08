@@ -1,11 +1,22 @@
 'use strict';
 const fs = require('fs');
+const { resolve } = require('path');
 const fileName = './test.txt';
-for (let count = 0; count < 500; count++) {
-  fs.appendFileSync(fileName, 'あ', 'utf8');
-  fs.appendFileSync(fileName, 'い', 'utf8');
-  fs.appendFileSync(fileName, 'う', 'utf8');
-  fs.appendFileSync(fileName, 'え', 'utf8');
-  fs.appendFileSync(fileName, 'お', 'utf8');
-  fs.appendFileSync(fileName, '\n', 'utf8');
+
+function appendFilePromise(fileName, str) {
+  return new Promise((resolve) => {
+    fs.appendFile(fileName, str, 'utf-8', () => resolve());
+  });
 }
+async function main() {
+  for (let count = 0; count < 500; count++) {
+    await appendFilePromise(fileName, 'あ');
+    await appendFilePromise(fileName, 'い');
+    await appendFilePromise(fileName, 'う');
+    await appendFilePromise(fileName, 'え');
+    await appendFilePromise(fileName, 'お');
+    await appendFilePromise(fileName, '\n');
+  }
+}
+
+main();
